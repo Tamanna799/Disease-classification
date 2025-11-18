@@ -1,0 +1,136 @@
+Disease Classification using LLM Fine-Tuning (QLoRA)
+
+This project fine-tunes a small open-source LLM using QLoRA to classify diseases based on natural-language symptom descriptions.
+It includes dataset cleaning, JSONL preparation, LoRA fine-tuning, evaluation, and a demo query as required by the assignment.
+
+🚀 Project Overview
+
+Input → Free-text symptoms
+
+Output → Predicted disease + Explanation
+
+Model → TinyLlama-1.1B-Chat
+
+Method → QLoRA (4-bit quantization + LoRA adapters)
+
+Dataset → Cleaned from DiseaseAndSymptoms.csv
+
+Files included → train.jsonl, test.jsonl, notebook, confusion matrix, demo output
+
+📂 Repository Contents
+File / Folder	Description
+notebook.ipynb	Complete Google Colab notebook with all steps
+train.jsonl	Cleaned + balanced training set
+test.jsonl	Cleaned + balanced test set
+confusion_matrix.png	Confusion matrix comparing true vs. predicted labels
+sample_demo_output.txt	Output of required demo query
+README.md	Project documentation
+lora_adapter/ (optional)	Saved LoRA weights
+🧹 Dataset Preparation
+
+The original Kaggle CSV is not uploaded (as the assignment requires).
+Steps performed:
+
+Remove duplicate rows
+
+Drop empty symptom entries
+
+Normalize text (lowercase, strip, clean punctuation)
+
+Fix NaN values
+
+Downsample over-represented diseases
+
+Convert into instruction-format JSONL:
+
+{
+  "instruction": "Identify the disease based on the symptoms.",
+  "input": "fever, cold, headache",
+  "output": "flu"
+}
+
+
+Final outputs stored as:
+
+train.jsonl
+
+test.jsonl
+
+🧠 Model & Training Details
+
+Base Model: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+
+Technique: QLoRA (4-bit quantization)
+
+Training:
+
+2 epochs
+
+Gradient accumulation (for low VRAM)
+
+fp16
+
+AdamW optimizer
+
+Frameworks:
+
+HuggingFace Transformers
+
+PEFT
+
+Datasets
+
+Accelerate
+
+The final fine-tuned model is saved as LoRA adapters in lora_adapter/.
+
+📊 Evaluation
+
+A confusion matrix is generated using predictions on test.jsonl.
+
+Included file:
+confusion_matrix.png
+
+This shows:
+
+True labels
+
+Predicted labels
+
+Misclassifications
+
+🧪 Demo Query (Required)
+
+Input Prompt:
+
+Symptoms: Fever, headache, body pain
+
+
+Model Output: (saved in sample_demo_output.txt)
+Example:
+
+Disease: dengue
+Explanation: These symptoms match dengue-like patterns present in the dataset.
+Note: This model is for educational use only. Not medical advice.
+
+▶️ How to Run the Notebook
+
+Open notebook.ipynb in Google Colab
+
+Upload the original Kaggle CSV
+
+Run all cells
+
+The notebook will automatically:
+
+Clean dataset
+
+Build JSONL
+
+Train the model
+
+Save LoRA adapter
+
+Generate confusion matrix
+
+Produce demo output
